@@ -18,4 +18,4 @@ Contributions are welcome! If you encounter issues or wish to enhance this integ
 
 ## License
 
-This project is licensed under the MIT License - please refer to the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - please refer to the [LICENSE](LICENSE.md) file for details.
