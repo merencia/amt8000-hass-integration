@@ -106,6 +106,7 @@ class Client:
             raise CommunicationError("Client not connected. Call Client.connect")
 
         self.client.close()
+        self.client.detach()
 
     def connect(self):
         """Create a new connection."""
