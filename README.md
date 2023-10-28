@@ -1,6 +1,6 @@
 # HACS Integration for Intelbras AMT-8000 Alarm System
 
-> **Important Notice:** If you have any affiliation with Intelbras, please read the license carefully before proceeding.
+> **Important Notice:** If you have any affiliation with Intelbras, please read the [LICENSE](LICENSE.md) carefully before proceeding.
 
 ## Description
 

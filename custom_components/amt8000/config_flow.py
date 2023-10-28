@@ -33,10 +33,13 @@ async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> dict[str,
     client = ISecClient(data["host"], data["port"])
     client.connect()
     auth = client.auth(data["password"])
+    client.close()
 
     if auth:
+        _LOGGER.info("AMT logged in!")
         return {"title": "AMT-8000"}
 
+    _LOGGER.error("Auth failed!")
     raise InvalidAuth
 
 

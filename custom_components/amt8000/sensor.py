@@ -26,10 +26,8 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up the entries for amt-8000."""
-    LOGGER.info("SETUP ENTRY AMT")
     data = hass.data[DOMAIN][config_entry.entry_id]
-    isec_client = ISecClient(data["host"], data["port"])
-    coordinator = AmtCoordinator(hass, isec_client, data["password"])
+    coordinator = AmtCoordinator(hass, data["host"], data["port"], data["password"])
     await coordinator.async_config_entry_first_refresh()
     sensors = [AmtStatusSensor(coordinator), AmtFiringSensor(coordinator)]
     async_add_entities(sensors)
@@ -38,7 +36,7 @@ async def async_setup_entry(
 class AmtCoordinator(DataUpdateCoordinator):
     """Coordinate the amt status update."""
 
-    def __init__(self, hass, isec_client, password):
+    def __init__(self, hass, host, port, password):
         """Initialize my coordinator."""
         super().__init__(
             hass,
@@ -46,18 +44,19 @@ class AmtCoordinator(DataUpdateCoordinator):
             name="AMT-8000 Data Polling",
             update_interval=timedelta(seconds=10),
         )
-        self.isec_client = isec_client
+        self.host = host
+        self.port = port
         self.password = password
 
     async def _async_update_data(self):
         """Retrieve the current status."""
-        LOGGER.info("AMT-8000 scann running")
-        self.isec_client.connect()
-        self.isec_client.auth(self.password)
-
-        status = self.isec_client.status()
-
-        self.isec_client.close()
+        LOGGER.info(f"retrieving amt-800 updated status at host: {self.host}:{self.port}...")
+        isec_client = ISecClient(self.host, self.port)
+        isec_client.connect()
+        isec_client.auth(self.password)
+        status = isec_client.status()
+        LOGGER.info(f"AMT-8000 new state: {status}")
+        isec_client.close()
 
         return status
 
@@ -94,7 +93,6 @@ class AmtStatusSensor(CoordinatorEntity, Entity):
     @property
     def state(self) -> str:
         """Return the state of the entity."""
-        LOGGER.info(self.status)
         if self.status is None:
             return "unknown"
 
@@ -138,7 +136,6 @@ class AmtFiringSensor(CoordinatorEntity, Entity):
     @property
     def state(self) -> str:
         """Return the state of the entity."""
-        LOGGER.info(self.status)
         if self.status is None:
             return "unknown"
 
