@@ -4,13 +4,13 @@ from __future__ import annotations
 import logging
 
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.core import HomeAssistant
+from homeassistant.core import HomeAssistant, ServiceCall, callback
 
 from .const import DOMAIN
 
 LOGGER = logging.getLogger(__name__)
 
-PLATFORMS: list[str] = ["sensor"]
+PLATFORMS: list[str] = ["alarm_control_panel"]
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
