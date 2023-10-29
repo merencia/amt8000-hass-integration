@@ -82,6 +82,9 @@ class AmtAlarmPanel(CoordinatorEntity, AlarmControlPanelEntity):
         if self.status is None:
             return "unknown"
 
+        if self.status['siren'] == True:
+            return "triggered"
+
         return self.status["status"]
 
     def _arm_away(self):
