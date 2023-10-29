@@ -14,7 +14,7 @@ from homeassistant.exceptions import HomeAssistantError
 from .const import DOMAIN
 from .isec2.client import Client as ISecClient
 
-_LOGGER = logging.getLogger(__name__)
+LOGGER = logging.getLogger(__name__)
 
 STEP_USER_DATA_SCHEMA = vol.Schema(
     {
@@ -23,7 +23,6 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
         vol.Required("password"): str,
     }
 )
-
 
 async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> dict[str, Any]:
     """Validate the user input allows us to connect.
@@ -36,10 +35,10 @@ async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> dict[str,
     client.close()
 
     if auth:
-        _LOGGER.info("AMT logged in!")
+        LOGGER.info("AMT logged in!")
         return {"title": "AMT-8000"}
 
-    _LOGGER.error("Auth failed!")
+    LOGGER.error("Auth failed!")
     raise InvalidAuth
 
 
@@ -61,7 +60,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             except InvalidAuth:
                 errors["base"] = "invalid_auth"
             except Exception:  # pylint: disable=broad-except
-                _LOGGER.exception("Unexpected exception")
+                LOGGER.exception("Unexpected exception")
                 errors["base"] = "unknown"
             else:
                 return self.async_create_entry(title=info["title"], data=user_input)

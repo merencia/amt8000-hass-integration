@@ -86,16 +86,16 @@ def get_status(payload):
 class CommunicationError(Exception):
     """Exception raised for communication error."""
 
-    def __init__(self, message="Salary is not in (5000, 15000) range"):
+    def __init__(self, message="Communication error"):
         """Initialize the error."""
         self.message = message
         super().__init__(self.message)
 
 
 class AuthError(Exception):
-    """Exception raised for communication error."""
+    """Exception raised for authentication error."""
 
-    def __init__(self, message="Salary is not in (5000, 15000) range"):
+    def __init__(self, message="Authentication Error"):
         """Initialize the error."""
         self.message = message
         super().__init__(self.message)

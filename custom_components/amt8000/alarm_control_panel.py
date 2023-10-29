@@ -33,7 +33,8 @@ async def async_setup_entry(
     data = hass.data[DOMAIN][config_entry.entry_id]
     isec_client = ISecClient(data["host"], data["port"])
     coordinator = AmtCoordinator(hass, isec_client, data["password"])
-    await coordinator.async_config_entry_first_refresh()
+    LOGGER.info('setting up...')
+    # coordinator.async_config_entry_first_refresh()
     sensors = [AmtAlarmPanel(coordinator, isec_client, data['password'])]
     async_add_entities(sensors)
 
