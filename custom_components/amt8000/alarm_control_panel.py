@@ -55,6 +55,7 @@ class AmtAlarmPanel(CoordinatorEntity, AlarmControlPanelEntity):
         self.status = None
         self.isec_client = isec_client
         self.password = password
+        self._is_on = False
 
     @callback
     def _handle_coordinator_update(self) -> None:
@@ -85,6 +86,9 @@ class AmtAlarmPanel(CoordinatorEntity, AlarmControlPanelEntity):
 
         if self.status['siren'] == True:
             return "triggered"
+
+        if(self.status["status"].startswith("armed_")):
+          self._is_on = True
 
         return self.status["status"]
 
@@ -140,4 +144,24 @@ class AmtAlarmPanel(CoordinatorEntity, AlarmControlPanelEntity):
     async def async_alarm_trigger(self, code=None) -> None:
         """Send alarm trigger command."""
         self._trigger_alarm()
+
+    @property
+    def is_on(self) -> bool | None:
+        """Return True if entity is on."""
+        return self._is_on
+
+    def turn_on(self, **kwargs: Any) -> None:
+        self._arm_away()
+
+    async def async_turn_on(self, **kwargs: Any) -> None:
+        """Turn the entity on."""
+        self._arm_away()
+
+    def turn_off(self, **kwargs: Any) -> None:
+        """Turn the entity off."""
+        self._disarm()
+
+    async def async_turn_off(self, **kwargs: Any) -> None:
+        """Turn the entity off."""
+        self._disarm()
 
