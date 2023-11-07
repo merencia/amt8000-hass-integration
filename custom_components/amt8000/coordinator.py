@@ -26,11 +26,17 @@ class AmtCoordinator(DataUpdateCoordinator):
 
     async def _async_update_data(self):
         """Retrieve the current status."""
-        LOGGER.info("retrieving amt-8000 updated status...")
-        self.isec_client.connect()
-        self.isec_client.auth(self.password)
-        status = self.isec_client.status()
-        LOGGER.info(f"AMT-8000 new state: {status}")
-        self.isec_client.close()
+        try:
+          LOGGER.info("retrieving amt-8000 updated status...")
+          self.isec_client.connect()
+          self.isec_client.auth(self.password)
+          status = self.isec_client.status()
+          LOGGER.info(f"AMT-8000 new state: {status}")
+          self.isec_client.close()
 
-        return status
+          return status
+        except Exception as e:
+          print(f"Coordinator update error: {e}")
+
+        finally:
+           self.isec_client.close()

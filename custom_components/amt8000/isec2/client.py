@@ -2,6 +2,8 @@
 
 import socket
 
+timeout = 2  # Set the timeout to 2 seconds
+
 dst_id = [0x00, 0x00]
 our_id = [0x8F, 0xFF]
 commands = {
@@ -119,10 +121,12 @@ class Client:
 
         self.client.close()
         self.client.detach()
+        self.client = None
 
     def connect(self):
         """Create a new connection."""
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.client.settimeout(timeout)
         self.client.connect((self.host, self.port))
 
     def auth(self, password):
