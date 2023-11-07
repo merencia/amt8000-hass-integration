@@ -121,7 +121,6 @@ class Client:
 
         self.client.close()
         self.client.detach()
-        self.client = None
 
     def connect(self):
         """Create a new connection."""
